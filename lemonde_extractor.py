@@ -3,6 +3,7 @@
 """
 This page defines the Implementation of an analyzer for "www.lemonde.fr"
 """
+from HTMLParser import HTMLParser
 
 from Isite_extractor import ISite_Extractor
 
@@ -34,7 +35,11 @@ class LeMonde_Extractor(ISite_Extractor):
         :return type: list()
         :return: the list of urls for each article webpage
         """
-        pass
+        url_list = list()
+
+
+
+        return url_list
 
     def get_article_text(self, article_webpage):
         """
@@ -45,3 +50,10 @@ class LeMonde_Extractor(ISite_Extractor):
         :return: the text from the article on a web page
         """
         pass
+
+class LeMondeHTMLParser(HTMLParser):
+    def handle_starttag(self, tag, attrs):
+        print "Encountered a start tag:", tag
+
+    def handle_endtag(self, tag):
+        print "Encountered an end tag :", tag
