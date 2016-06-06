@@ -5,7 +5,7 @@ This page defines the Interface for a web page analyzer in this app.
 It stores top level functions that should be implemented for all websites supported by Newzer
 """
 
-class IPage_Analyzer():
+class ISite_Extractor():
     """
     This class is the standard interface of a page analyzer, for any website supported by this app.
     e.g. A class NewYorkTime_Analyzer will inherit from this interface and implement it as needed.
@@ -16,6 +16,8 @@ class IPage_Analyzer():
         Get the news feed with newly published articles from the website home base_url
         :type base_url: str
         :param base_url: The home url of the given website.  e.g. "http://www.nytimes.com/"
+        :return type: str
+        :return: the url on the news feed webpage
         """
         pass
 
@@ -24,6 +26,8 @@ class IPage_Analyzer():
         Get the article webpage list from the webpage containing all the newly added articles.
         :type news_feed_webpage: str
         :param news_feed_webpage: the html page where articles' urls are
+        :return type: list()
+        :return: the list of urls for each article webpage
         """
         pass
 
@@ -32,5 +36,7 @@ class IPage_Analyzer():
         Extract the text of the article from the raw webpage
         :type article_webpage: str
         :param article_webpage: The webpage containing the article to extract
+        :return type: str
+        :return: the text from the article on a web page
         """
         pass
