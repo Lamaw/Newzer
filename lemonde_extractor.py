@@ -13,7 +13,7 @@ class LeMonde_Extractor(ISite_Extractor):
     """
 
     def __init__(self):
-        self.base_url = "http://www.lemonde.fr/"
+        self.base_url = "http://www.lemonde.fr"
 
     def get_news_feed(self):
         """
@@ -22,7 +22,7 @@ class LeMonde_Extractor(ISite_Extractor):
         :return: the url on the news feed webpage
         """
         try:
-            news_feed_url = self.base_url + "actualite-en-continu/"
+            news_feed_url = self.base_url + "/actualite-en-continu/"
         except:
             news_feed_url = None
         return news_feed_url
@@ -36,8 +36,19 @@ class LeMonde_Extractor(ISite_Extractor):
         :return: the list of urls for each article webpage
         """
         url_list = list()
+        try: # Use HTML parser to extract appropriates urls
+            lemonde_parser = LeMondeHTMLParser()
+            lemonde_parser.feed(news_feed_webpage)
+            partial_url_list = lemonde_parser.links
+        except:
+            pass
 
-
+        # add the base url of the website if not present in the article url
+        for url in partial_url_list:
+            if not 'http' in url:
+                url_list.append(self.base_url + url)
+            else:
+                url_list.append(url)
 
         return url_list
 
@@ -52,8 +63,29 @@ class LeMonde_Extractor(ISite_Extractor):
         pass
 
 class LeMondeHTMLParser(HTMLParser):
+
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.links = list()
+        self.article_section = False
+
     def handle_starttag(self, tag, attrs):
-        print "Encountered a start tag:", tag
+        try:
+            if tag == "article":
+                for name, value in attrs:
+                    if name == 'class' and 'grid_12 alpha enrichi' in value:
+                        self.article_section = True
+            elif tag == "a" and self.article_section == True:
+                for name, value in attrs:
+                    if name == "href":
+                        if value not in self.links:
+                            self.links.append(value)
+        except:
+            pass
 
     def handle_endtag(self, tag):
-        print "Encountered an end tag :", tag
+        try:
+            if tag == "article":
+                self.article_section = False
+        except:
+            pass
