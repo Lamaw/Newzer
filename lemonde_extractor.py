@@ -36,12 +36,11 @@ class LeMonde_Extractor(ISite_Extractor):
         :return: the list of urls for each article webpage
         """
         url_list = list()
-        try: # Use HTML parser to extract appropriates urls
-            lemonde_parser = LeMondeHTMLParser()
-            lemonde_parser.feed(news_feed_webpage)
-            partial_url_list = lemonde_parser.links
-        except:
-            pass
+        # Use HTML parser to extract appropriates urls
+        lemonde_parser = LeMondeHTMLParser()
+        lemonde_parser.feed(news_feed_webpage)
+        partial_url_list = lemonde_parser.links
+
 
         # add the base url of the website if not present in the article url
         for url in partial_url_list:
@@ -60,7 +59,12 @@ class LeMonde_Extractor(ISite_Extractor):
         :return type: str
         :return: the text from the article on a web page
         """
-        pass
+        article_text = ""
+        lemonde_parser = LeMondeHTMLParser()
+        lemonde_parser.feed(article_webpage)
+        text = lemonde_parser.article_data
+
+        return text
 
 class LeMondeHTMLParser(HTMLParser):
 
@@ -68,6 +72,9 @@ class LeMondeHTMLParser(HTMLParser):
         HTMLParser.__init__(self)
         self.links = list()
         self.article_section = False
+        self.article_body = False
+        self.div_open_in_article_body = 0
+        self.article_data = ""
 
     def handle_starttag(self, tag, attrs):
         try:
@@ -80,6 +87,12 @@ class LeMondeHTMLParser(HTMLParser):
                     if name == "href":
                         if value not in self.links:
                             self.links.append(value)
+            elif tag == "div" and not self.article_body:
+                for name, value in attrs:
+                    if name == 'id' and value == 'articleBody':
+                        self.article_body = True
+            elif tag == 'div' and self.article_body:
+                self.div_open_in_article_body += 1
         except:
             pass
 
@@ -87,5 +100,14 @@ class LeMondeHTMLParser(HTMLParser):
         try:
             if tag == "article":
                 self.article_section = False
+            elif tag == "div" and self.article_body and self.div_open_in_article_body == 0:
+                self.article_body = False
+            elif tag == 'div' and self.article_body and self.div_open_in_article_body > 0:
+                self.div_open_in_article_body -= 1
+
         except:
             pass
+
+    def handle_data(self, data):
+        if self.article_body:
+            self.article_data += data

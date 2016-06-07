@@ -31,7 +31,17 @@ if __name__ == '__main__':
 	# 	output_file.write(articles[1].read().encode('utf-8'))
 
     lemonde = LeMonde_Extractor()
-    print "News feed url : ", lemonde.get_news_feed()
+    print "News feed url : "
+    print lemonde.get_news_feed()
     news_feed_page = give_IO_page_content(lemonde.get_news_feed())
-    print lemonde.get_article_webpage_list(news_feed_page)
+    print
+    print "Article url list : "
+    urls_article_list = lemonde.get_article_webpage_list(news_feed_page)
+    print urls_article_list
+    print 
+    article_url = urls_article_list[0]
+    print
+    print "url of opened article : ", article_url
+    print "First article content : "
+    print lemonde.get_article_text(give_IO_page_content(article_url))
 
