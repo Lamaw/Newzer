@@ -40,3 +40,23 @@ class ISiteExtractor():
         :return: the text from the article on a web page
         """
         pass
+
+    def get_article_category(article_webpage):
+        """
+        Extract the category of the article from the raw webpage
+        :type article_webpage: str
+        :param article_webpage: The webpage containing the article to extract
+        :return type: str
+        :return: the category from the article on a web page (e.g: sport, economy, politics, etc...)
+        """
+        pass
+
+    def get_article_author(article_webpage):
+        """
+        Extract the author of the article from the raw webpage
+        :type article_webpage: str
+        :param article_webpage: The webpage containing the article to extract
+        :return type: str
+        :return: the author name from the article on a web page
+        """
+        pass
