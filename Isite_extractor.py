@@ -5,7 +5,7 @@ This page defines the Interface for a web page analyzer in this app.
 It stores top level functions that should be implemented for all websites supported by Newzer
 """
 
-class ISite_Extractor():
+class ISiteExtractor():
     """
     This class is the standard interface of a page analyzer, for any website supported by this app.
     e.g. A class NewYorkTime_Analyzer will inherit from this interface and implement it as needed.

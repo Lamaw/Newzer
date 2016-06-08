@@ -5,9 +5,9 @@ This page defines the Implementation of an analyzer for "www.lemonde.fr"
 """
 from HTMLParser import HTMLParser
 
-from Isite_extractor import ISite_Extractor
+from Isite_extractor import ISiteExtractor
 
-class LeMonde_Extractor(ISite_Extractor):
+class LeMondeExtractor(ISiteExtractor):
     """
     This class implements the Page analyzer interface for "lemonde.fr" website
     """
@@ -92,7 +92,7 @@ class LeMondeHTMLParser(HTMLParser):
             elif tag == "a" and self.article_section == True: # get a link from the news feed
                 for name, value in attrs:
                     if name == "href":
-                        if value not in self.links:
+                        if value not in self.links and "/journaliste/" not in value:
                             self.links.append(value)
             elif tag == "div" and not self.article_body: # Set flag from article body to true
                 for name, value in attrs:

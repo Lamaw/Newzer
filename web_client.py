@@ -1,47 +1,36 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import sys
 import StringIO
-import page_analyzer as pa
-from lemonde_extractor import LeMonde_Extractor
+from lemonde_extractor import LeMondeExtractor
 
+class WebRequester():
 
-def give_IO_page_content(url):
-    resp = requests.get(url)
-    #return StringIO.StringIO(resp.text)
-    return resp.text
+    def __init__(self):
+        pass
 
+    def give_IO_page_content(self, url):
+        resp = requests.get(url)
+        return StringIO.StringIO(resp.text)
 
-if __name__ == '__main__':
+    def give_page_content(self, url):
+        resp = requests.get(url)
+        return resp.text
 
-	# news_feed = give_IO_page_content('http://www.lemonde.fr/actualite-en-continu/')
+# if __name__ == '__main__':
+    # req = WebRequester()
 
-	# article_links = pa.get_article_links_from_feed(news_feed)
-
-	# articles = list()
-
-	# for link in article_links:
-	# 	articles.append(give_IO_page_content('http://www.lemonde.fr' + str(link)))
-
-	# with open("article.txt", "w+") as output_file:
-	# 	output_file.write(articles[0].read().encode('utf-8'))
-
-	# with open("article2.txt", "w+") as output_file:
-	# 	output_file.write(articles[1].read().encode('utf-8'))
-
-    lemonde = LeMonde_Extractor()
-    print "News feed url : "
-    print lemonde.get_news_feed()
-    news_feed_page = give_IO_page_content(lemonde.get_news_feed())
-    print
-    print "Article url list : "
-    urls_article_list = lemonde.get_article_webpage_list(news_feed_page)
-    print urls_article_list
-    print 
-    article_url = urls_article_list[0]
-    print
-    print "url of opened article : ", article_url
-    print "First article content : "
-    print lemonde.get_article_text(give_IO_page_content(article_url))
-
+    # lemonde = LeMondeExtractor()
+    # print "News feed url : "
+    # print lemonde.get_news_feed()
+    # news_feed_page = req.give_page_content(lemonde.get_news_feed())
+    # print
+    # print "Article url list : "
+    # urls_article_list = lemonde.get_article_webpage_list(news_feed_page)
+    # print urls_article_list
+    # print
+    # article_url = urls_article_list[0]
+    # print
+    # print "url of opened article : ", article_url
+    # print "First article content : "
+    # print lemonde.get_article_text(req.give_page_content(article_url))
