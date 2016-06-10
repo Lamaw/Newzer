@@ -1,6 +1,9 @@
 import sqlite3
 
 class WebDataStorageManager():
+    """
+    Class managing the database with all raw data from news websites
+    """
 
     def __init__(self):
         self.connect = sqlite3.connect('articles.db')
@@ -41,5 +44,26 @@ class WebDataStorageManager():
             self.cursor.execute(statement + table_entries + ");" )
         except:
             print "Error found in : ", table_entries
+            raise
         self.connect.commit()
+
+    def get_stored_content_from_column(self, table_name, column_name, **kwargs):
+        """
+        Return a list containing all the values from a column in a database table
+        can be filtered via kwargs. (WHERE k=v)
+        """
+        stored_content = list()
+
+        statement = "SELECT %s FROM %s" %(column_name, table_name)
+
+        if len(kwargs) > 0:
+            statement += "WHERE "
+            for k,v in kwargs.items():
+                statement += k + "='" + v + "'"
+
+        self.cursor.execute(statement)
+        stored_content = self.cursor.fetchall()
+
+        return stored_content
+
 
