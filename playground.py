@@ -45,6 +45,8 @@ for article_url in urls_article_list:
         print "Error in : ", article_url
         print "ERROR : ", e
 
+print "There are currently", len(stored_url_list) + article_stored, "articles stored in the database."
+
 # Display data from database
 
 # db.cursor.execute("SELECT Url FROM ARTICLE WHERE Source='Le Monde'")

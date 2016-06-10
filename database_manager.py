@@ -6,7 +6,7 @@ class WebDataStorageManager():
     """
 
     def __init__(self):
-        self.connect = sqlite3.connect('articles.db')
+        self.connect = sqlite3.connect('newzer.db')
         self.cursor = self.connect.cursor()
 
     def kill_connect(self):
@@ -42,9 +42,9 @@ class WebDataStorageManager():
         statement = "INSERT INTO %s VALUES (" %(table_name)
         try:
             self.cursor.execute(statement + table_entries + ");" )
-        except:
+        except Exception as e:
             print "Error found in : ", table_entries
-            raise
+            raise e
         self.connect.commit()
 
     def get_stored_content_from_column(self, table_name, column_name, **kwargs):
@@ -57,7 +57,7 @@ class WebDataStorageManager():
         statement = "SELECT %s FROM %s" %(column_name, table_name)
 
         if len(kwargs) > 0:
-            statement += "WHERE "
+            statement += " WHERE "
             for k,v in kwargs.items():
                 statement += k + "='" + v + "'"
 
@@ -65,5 +65,6 @@ class WebDataStorageManager():
         stored_content = self.cursor.fetchall()
 
         return stored_content
+
 
 

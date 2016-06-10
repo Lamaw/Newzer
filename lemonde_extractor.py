@@ -127,6 +127,8 @@ class LeMondeHTMLParser(HTMLParser):
                         self.suspend_acquisition = True
             elif tag == 'section' and self.article_body:
                 self.suspend_acquisition == True
+            elif tag == 'iframe' and self.article_body:
+                self.suspend_acquisition == True
         except:
             pass
 
@@ -144,6 +146,8 @@ class LeMondeHTMLParser(HTMLParser):
             elif tag == 'p' and self.suspend_acquisition == True:
                 self.suspend_acquisition == False
             elif tag == 'section' and self.suspend_acquisition == True:
+                self.suspend_acquisition == False
+            elif tag == 'iframe' and self.suspend_acquisition == True:
                 self.suspend_acquisition == False
 
         except:
