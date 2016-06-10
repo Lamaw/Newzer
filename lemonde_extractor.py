@@ -97,6 +97,7 @@ class LeMondeHTMLParser(HTMLParser):
         self.links = list() # The list of links from the news feed
         self.article_section = False # Flag for news feed parsing
         self.article_body = False # Flag for article text acquisition
+        self.suspend_acquisition = False # flag to suspend data aqcuisition in the article body
         self.div_open_in_article_body = 0 # Number of open inside the main article div
         self.article_data = "" # store the text from the article
 
@@ -120,6 +121,12 @@ class LeMondeHTMLParser(HTMLParser):
                         self.article_body = True
             elif tag == 'div' and self.article_body: # Increment number of open div in the main div of article (used to determine when the main article div is closed)
                 self.div_open_in_article_body += 1
+            elif tag == 'p' and self.article_body:  # Suspend aqcuisition for "lire aussi" section
+                for name, value in attrs:
+                    if name == 'class' and value == 'lire':
+                        self.suspend_acquisition = True
+            elif tag == 'section' and self.article_body:
+                self.suspend_acquisition == True
         except:
             pass
 
@@ -134,6 +141,10 @@ class LeMondeHTMLParser(HTMLParser):
                 self.article_body = False
             elif tag == 'div' and self.article_body and self.div_open_in_article_body > 0:
                 self.div_open_in_article_body -= 1
+            elif tag == 'p' and self.suspend_acquisition == True:
+                self.suspend_acquisition == False
+            elif tag == 'section' and self.suspend_acquisition == True:
+                self.suspend_acquisition == False
 
         except:
             pass
@@ -143,4 +154,5 @@ class LeMondeHTMLParser(HTMLParser):
         Store data when in right section of parsing
         """
         if self.article_body:
-            self.article_data += data
+            if not self.suspend_acquisition:
+                self.article_data += data
