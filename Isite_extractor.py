@@ -11,7 +11,7 @@ class ISiteExtractor():
     e.g. A class NewYorkTime_Analyzer will inherit from this interface and implement it as needed.
     """
 
-    def get_news_feed(base_url):
+    def get_news_feed(self, base_url):
         """
         Get the news feed with newly published articles from the website home base_url
         :type base_url: str
@@ -21,7 +21,7 @@ class ISiteExtractor():
         """
         pass
 
-    def get_article_webpage_list(news_feed_webpage):
+    def get_article_webpage_list(self, news_feed_webpage):
         """
         Get the article webpage list from the webpage containing all the newly added articles.
         :type news_feed_webpage: str
@@ -31,7 +31,7 @@ class ISiteExtractor():
         """
         pass
 
-    def get_article_text(article_webpage):
+    def get_article_text(self, article_webpage):
         """
         Extract the text of the article from the raw webpage
         :type article_webpage: str
@@ -41,7 +41,7 @@ class ISiteExtractor():
         """
         pass
 
-    def get_article_category(article_webpage):
+    def get_article_category(self, article_webpage):
         """
         Extract the category of the article from the raw webpage
         :type article_webpage: str
@@ -51,7 +51,7 @@ class ISiteExtractor():
         """
         pass
 
-    def get_article_author(article_webpage):
+    def get_article_author(self, article_webpage):
         """
         Extract the author of the article from the raw webpage
         :type article_webpage: str

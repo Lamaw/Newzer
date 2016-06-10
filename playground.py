@@ -17,7 +17,7 @@ urls_article_list = lemonde.get_article_webpage_list(news_feed_page)
 
 # Database initialisation
 try:
-    db.create_table(table_name, 'Source','Url','Content')
+    db.create_table(table_name, 'Source','Url','Content','Category')
     print "Table "+ table_name + " created."
 except:
     print "Table already existing, no creation needed."
@@ -37,8 +37,10 @@ if len(urls_article_list) == 0:
     print "No new article to download"
 for article_url in urls_article_list:
     try:
-        article_content = lemonde.get_article_text(req.give_page_content(article_url))
-        db.insert_data(table_name, 'Le Monde',article_url, article_content)
+        webpage = req.give_page_content(article_url)
+        article_content = lemonde.get_article_text(webpage)
+        article_category = lemonde.get_article_category(webpage)
+        db.insert_data(table_name, 'Le Monde',article_url, article_content, article_category)
         article_stored += 1
         print "Article stored : ", article_stored
     except Exception as e:

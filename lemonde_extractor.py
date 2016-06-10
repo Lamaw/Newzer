@@ -59,14 +59,11 @@ class LeMondeExtractor(ISiteExtractor):
         :return type: str
         :return: the text from the article on a web page
         """
-        article_text = ""
         lemonde_parser = LeMondeHTMLParser()
         lemonde_parser.feed(article_webpage)
-        text = lemonde_parser.article_data
+        return lemonde_parser.article_data
 
-        return text
-
-    def get_article_category(article_webpage):
+    def get_article_category(self, article_webpage):
         """
         Extract the category of the article from the raw webpage
         :type article_webpage: str
@@ -74,9 +71,11 @@ class LeMondeExtractor(ISiteExtractor):
         :return type: str
         :return: the category from the article on a web page (e.g: sport, economy, politics, etc...)
         """
-        pass
+        lemonde_parser = LeMondeHTMLParser()
+        lemonde_parser.feed(article_webpage)
+        return lemonde_parser.category
 
-    def get_article_author(article_webpage):
+    def get_article_author(self, article_webpage):
         """
         Extract the author of the article from the raw webpage
         :type article_webpage: str
@@ -100,6 +99,7 @@ class LeMondeHTMLParser(HTMLParser):
         self.suspend_acquisition = False # flag to suspend data aqcuisition in the article body
         self.div_open_in_article_body = 0 # Number of open inside the main article div
         self.article_data = "" # store the text from the article
+        self.category = "" # store the category of the article
 
     def handle_starttag(self, tag, attrs):
         """
@@ -129,6 +129,10 @@ class LeMondeHTMLParser(HTMLParser):
                 self.suspend_acquisition == True
             elif tag == 'iframe' and self.article_body:
                 self.suspend_acquisition == True
+            elif tag == 'body':
+                for name, value in attrs:
+                    if name == "class":
+                        self.category = value
         except:
             pass
 
